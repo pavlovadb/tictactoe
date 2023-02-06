@@ -146,6 +146,8 @@ loop do
     prompt "#{computer_win_count}/5"
     prompt "#{tie}"
 
+    who_goes_first
+    
     loop do
       display_board(board)
       player_places_piece!(board)
