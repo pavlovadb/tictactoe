@@ -147,8 +147,11 @@ end
 
 def place_piece!(brd, current_player)
   if current_player == 'p'
+    prompt "Player's turn."
     player_places_piece!(brd)
   else
+    prompt "Computer's turn."
+    sleep(1)
     computer_places_piece!(brd)
   end
 end
@@ -169,35 +172,37 @@ loop do
 
     loop do
       display_board(board)
-      prompt "Current player is #{current_player}"
+      place_piece!(board, current_player)
+      current_player = alternate_player(current_player)
+      break if someone_won?(board) || board_full?(board)
 
-      if first_player == 'c'
-        prompt "Computer is going first this round."
-        sleep(1)
-        place_piece!(board, current_player)
-        break if someone_won?(board) || board_full?(board)
-
-        current_player = alternate_player(current_player)
-
-        display_board(board)
-        prompt "Current player is #{current_player}"
-
-        place_piece!(board, current_player)
-        break if someone_won?(board) || board_full?(board)
-        current_player = alternate_player(current_player)
-      end
-
-      if first_player == 'p'
-        prompt "Player is going first this round."
-        player_places_piece!(board)
-        break if someone_won?(board) || board_full?(board)
-
-        current_player = alternate_player(current_player)
-
-        computer_places_piece!(board)
-        break if someone_won?(board) || board_full?(board)
-        current_player = alternate_player(current_player)
-      end
+      # if first_player == 'c'
+      #   prompt "Computer is going first this round."
+      #   sleep(1)
+      #   place_piece!(board, current_player)
+      #   break if someone_won?(board) || board_full?(board)
+      #
+      #   current_player = alternate_player(current_player)
+      #
+      #   display_board(board)
+      #   prompt "Current player is #{current_player}"
+      #
+      #   place_piece!(board, current_player)
+      #   break if someone_won?(board) || board_full?(board)
+      #   current_player = alternate_player(current_player)
+      # end
+      #
+      # if first_player == 'p'
+      #   prompt "Player is going first this round."
+      #   player_places_piece!(board)
+      #   break if someone_won?(board) || board_full?(board)
+      #
+      #   current_player = alternate_player(current_player)
+      #
+      #   computer_places_piece!(board)
+      #   break if someone_won?(board) || board_full?(board)
+      #   current_player = alternate_player(current_player)
+      # end
     end
 
     display_board(board)
