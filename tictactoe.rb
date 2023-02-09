@@ -68,8 +68,6 @@ def find_at_risk_square(line, board, marker)
   # detects if two player marks are next to each other
   if board.values_at(*line).count(marker) == 2
     board.select{ |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
-  else
-    nil
   end
 end
 
@@ -91,8 +89,6 @@ def computer_places_piece!(brd)
   if !square
     if brd[5].include?(INITIAL_MARKER)
       square = 5
-    else
-      nil
     end
   end
   #random
