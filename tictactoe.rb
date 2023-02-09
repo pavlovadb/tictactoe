@@ -12,6 +12,7 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
+# rubocop:disable Metrics/AbcSize
 def display_board(brd)
   system 'clear'
   puts "Best out of 5 wins player"
@@ -28,6 +29,7 @@ def display_board(brd)
   puts " #{brd[7]}   |  #{brd[8]}  |  #{brd[9]}"
   puts "     |     |"
 end
+# rubocop: enable Metrics/AbcSize
 
 def initialize_board
   new_board = {}
@@ -67,7 +69,7 @@ end
 def find_at_risk_square(line, board, marker)
   # detects if two player marks are next to each other
   if board.values_at(*line).count(marker) == 2
-    board.select{ |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
+    board.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
   end
 end
 
@@ -91,7 +93,7 @@ def computer_places_piece!(brd)
       square = 5
     end
   end
-  #random
+  # random
   if !square
     square = empty_squares(brd).sample
   end
@@ -175,34 +177,6 @@ loop do
       place_piece!(board, current_player)
       current_player = alternate_player(current_player)
       break if someone_won?(board) || board_full?(board)
-
-      # if first_player == 'c'
-      #   prompt "Computer is going first this round."
-      #   sleep(1)
-      #   place_piece!(board, current_player)
-      #   break if someone_won?(board) || board_full?(board)
-      #
-      #   current_player = alternate_player(current_player)
-      #
-      #   display_board(board)
-      #   prompt "Current player is #{current_player}"
-      #
-      #   place_piece!(board, current_player)
-      #   break if someone_won?(board) || board_full?(board)
-      #   current_player = alternate_player(current_player)
-      # end
-      #
-      # if first_player == 'p'
-      #   prompt "Player is going first this round."
-      #   player_places_piece!(board)
-      #   break if someone_won?(board) || board_full?(board)
-      #
-      #   current_player = alternate_player(current_player)
-      #
-      #   computer_places_piece!(board)
-      #   break if someone_won?(board) || board_full?(board)
-      #   current_player = alternate_player(current_player)
-      # end
     end
 
     display_board(board)
@@ -242,5 +216,4 @@ loop do
   break if answer.downcase.include?('n')
 end
 
-
-prompt 'Goodbye'
+prompt 'Thanks for playing. Goodbye'
