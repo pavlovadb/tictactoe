@@ -1,8 +1,8 @@
 require 'pry'
 
 INITIAL_MARKER = ' '
-PLAYER_MARKER = 'X'
-COMPUTER_MARKER = 'O'
+PLAYER_MARKER = 'O'
+COMPUTER_MARKER = 'X'
 
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
@@ -15,7 +15,7 @@ end
 def display_board(brd)
   system 'clear'
   puts "Best out of 5 wins player"
-  puts "You're a #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
+  puts "You're #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
   puts "     |     |"
   puts " #{brd[1]}   |  #{brd[2]}  |  #{brd[3]}"
   puts "     |     |"
@@ -127,11 +127,18 @@ def detect_winner(brd)
 end
 
 def who_goes_first
-  # ask the player who should play first
-  # caputer the answer in a variable
-  # build another method
-  prompt "Who should begin the game? (p for player, c for computer "
-  first_move = gets.chomp
+  first_move = nil
+  loop do
+    prompt "Who should begin this round?
+    (p for player, c for computer, or idc to let the computer decide): "
+    first_move = gets.chomp
+
+    break if first_move == 'p' || first_move == 'idc' || first_move == 'c'
+
+    prompt "Sorry that's not a valid choice."
+  end
+  first_move = %w(p c).sample if first_move == 'idc'
+  first_move
 end
 
 loop do
@@ -142,25 +149,43 @@ loop do
   loop do
     board = initialize_board
 
-    prompt "#{player_win_count}/5"
-    prompt "#{computer_win_count}/5"
-    prompt "#{tie}"
+    display_board(board)
 
-    who_goes_first
-    
+    first_player = who_goes_first
+
     loop do
       display_board(board)
-      player_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
 
-      computer_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
+      if first_player == 'c'
+        prompt "Computer is going first this round."
+        sleep(1)
+        computer_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
+
+        display_board(board)
+
+        player_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
+      end
+
+      if first_player == 'p'
+        prompt "Player is going first this round."
+        player_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
+
+        computer_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
+      end
+
+      if first_player == 'idk'
+
+      end
     end
 
     display_board(board)
 
     if someone_won?(board)
-      prompt "#{detect_winner(board)} won!"
+      prompt "#{detect_winner(board)} won this round!"
     else
       prompt "It's a tie"
     end
@@ -172,9 +197,15 @@ loop do
       tie += 1
     end
 
+    prompt '--------------------------------'
+    prompt "Best out of 5 rounds wins:"
     prompt "Player: #{player_win_count}/5"
     prompt "Computer: #{computer_win_count}/5"
     prompt "Ties: #{tie}"
+    prompt '--------------------------------'
+
+    prompt "Press any key to continue to next round: "
+    gets.chomp
 
     break if player_win_count == 5 || computer_win_count == 5
   end
