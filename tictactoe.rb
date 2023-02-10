@@ -73,6 +73,8 @@ def find_at_risk_square(line, board, marker)
   end
 end
 
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/MethodLength
 def computer_places_piece!(brd)
   square = nil
   # offense first
@@ -100,6 +102,8 @@ def computer_places_piece!(brd)
 
   brd[square] = COMPUTER_MARKER
 end
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/MethodLength
 
 def board_full?(brd)
   empty_squares(brd).empty?
@@ -109,6 +113,8 @@ def someone_won?(brd)
   !!detect_winner(brd) # forcibly turns whatever value is here into a boolean
 end
 
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop: disable Metrics/PerceivedComplexity
 def detect_winner(brd)
   WINNING_LINES.each do |line|
     if brd[line[0]] == PLAYER_MARKER &&
@@ -123,6 +129,8 @@ def detect_winner(brd)
   end
   nil
 end
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/PerceivedComplexity
 
 def who_goes_first
   first_move = nil
